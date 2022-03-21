@@ -1,0 +1,23 @@
+### GET: USERS
+GET http://localhost:3333/users
+
+### POST: USERS
+POST http://localhost:3333/users
+Content-Type: application/json; charset=utf-8
+
+{
+    "name": "Novo Passageiro",
+    "role": "Passageiro"
+}
+
+### PUT: USERS
+PUT http://localhost:3333/users/1
+Content-Type: application/json; charset=utf-8
+
+{
+    "name": "Vaux Gomes",
+    "role": "Administrador"
+}
+
+### DELETE: USERS
+DELETE http://localhost:3333/users/2
