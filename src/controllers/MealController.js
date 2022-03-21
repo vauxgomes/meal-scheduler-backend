@@ -1,8 +1,10 @@
+const { meals } = require('../mock/data')
+
 // Controller
 module.exports = {
     // Index
     async index(req, res) {
-        return res.send([])
+        return res.send(meals)
     },
 
     // Create
