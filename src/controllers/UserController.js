@@ -1,10 +1,12 @@
-const { users } = require('../mock/data');
+// DB
+const knex = require('../database')
 
 // Controller
 module.exports = {
     // Index
     async index(req, res) {
-        return res.send(users)
+        const users = await knex.select('name', 'username').from('users')
+        return res.json(users)
     },
 
     // Create

@@ -1,17 +1,15 @@
-const { meals } = require('../mock/data')
-
 // Controller
 module.exports = {
     // Index
     async index(req, res) {
-        return res.send(meals)
+        return res.json([])
     },
 
     // Create
     async create(req, res) {
         return res.status(200).send({
             success: true,
-            msg: 'Refeição Cadastrado'
+            msg: 'Agendamento Cadastrado'
         })
     },
 
@@ -19,7 +17,7 @@ module.exports = {
     async update(req, res) {
         return res.status(200).send({
             success: true,
-            msg: 'Refeição Atualizado'
+            msg: 'Agendamento Atualizado'
         })
     },
 
@@ -27,7 +25,7 @@ module.exports = {
     async delete(req, res) {
         return res.status(200).send({
             success: true,
-            msg: 'Refeição Removido'
+            msg: 'Agendamento Removido'
         })
     }
 }
