@@ -1,4 +1,6 @@
 exports.seed = async function (knex) {
+    console.log('SEEDS: MEALS')
+
     await knex('meals').del()
     await knex('meals').insert([
         {

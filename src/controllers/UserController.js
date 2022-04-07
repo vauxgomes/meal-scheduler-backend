@@ -25,16 +25,18 @@ module.exports = {
     // Create
     async create(req, res) {
         try {
-            const { name, username, password, role = 300 } = req.body
-            const [user_id] = await knex('users').insert({
+            const { name, username, password, access = 3 } = req.body
+            const [id] = await knex('users').insert({
                 name,
                 username,
                 password,
-                role
+                access
             })
 
-            return res.json({ id: user_id })
+            return res.json({ id })
         } catch (err) {
+            console.log(err)
+
             if (err)
                 return res.status(400).json({
                     success: false,
@@ -51,7 +53,7 @@ module.exports = {
     // Update
     async update(req, res) {
         const { id } = req.params
-        const { name, username, password, role, active } = req.body
+        const { name, username, password, access, active } = req.body
 
         try {
             await knex('users')
@@ -59,7 +61,7 @@ module.exports = {
                     name,
                     username,
                     password,
-                    role,
+                    access,
                     active
                 })
                 .where({ id })

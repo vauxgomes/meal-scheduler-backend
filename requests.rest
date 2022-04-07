@@ -10,7 +10,7 @@ Content-Type: application/json; charset=utf-8
 
 {
     "name": "Novo Usuário",
-    "username": "user9",
+    "username": "user1",
     "password": "123"
 }
 
@@ -23,21 +23,52 @@ Content-Type: application/json; charset=utf-8
 }
 
 ### DELETE: USERS
-DELETE http://localhost:3333/users/2
+DELETE http://localhost:3333/users/7
+
+# -----------------------------------------------------
+
+### GET: MEALS
+GET http://localhost:3333/meals
+
+### SHOW: MEALLS
+GET http://localhost:3333/meals/1
+
+### POST: MEALS
+POST http://localhost:3333/meals
+Content-Type: application/json; charset=utf-8
+
+{
+    "title": "Risoto de frango",
+    "description": "Risoto de frango, salada crua (alface, tomate, repolho, beterraba) e laranja"
+}
+
+### PUT: MEALS
+PUT http://localhost:3333/meals/1
+Content-Type: application/json; charset=utf-8
+
+{
+    "title": "Meal 5",
+    "energy": 200
+}
+
+### DELETE: MEALS
+DELETE http://localhost:3333/meals/2
 
 # -----------------------------------------------------
 
 ### GET: STUDENTS
 GET http://localhost:3333/students
 
+### GET: STUDENTS
+GET http://localhost:3333/students/3
+
 ### POST: STUDENTS
 POST http://localhost:3333/students
 Content-Type: application/json; charset=utf-8
 
 {
-    "user_id": 5,
-    "registration_code": "20220000002",
-    "course": "Automação Industrial",
+    "user_id": 4,
+    "course": 5,
     "food_restriction": true
 }
 
@@ -46,36 +77,11 @@ PUT http://localhost:3333/students/1
 Content-Type: application/json; charset=utf-8
 
 {
-    "registration_code": "20220000002",
-    "course": "Automação Industrial",
-    "food_restriction": true
+    "food_restriction": false
 }
 
-# -----------------------------------------------------
-
-### GET: MEALS
-GET http://localhost:3333/meals
-
-### POST: MEALS
-POST http://localhost:3333/meals
-Content-Type: application/json; charset=utf-8
-
-{
-    "description": "Meal 5",
-    "calorific_value": 100
-}
-
-### PUT: MEALS
-PUT http://localhost:3333/meals/1
-Content-Type: application/json; charset=utf-8
-
-{
-    "description": "Meal 5",
-    "calorific_value": 200
-}
-
-### DELETE: MEALS
-DELETE http://localhost:3333/meals/2
+### DELETE: STUDENTS
+DELETE http://localhost:3333/students/3
 
 # -----------------------------------------------------
 
