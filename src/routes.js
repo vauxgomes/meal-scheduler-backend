@@ -6,6 +6,8 @@ const routes = express.Router()
 const UserController = require('./controllers/UserController')
 const StudentController = require('./controllers/StudentController')
 const MealController = require('./controllers/MealController')
+const ScheduleController = require('./controllers/ScheduleController')
+const OrderController = require('./controllers/OrderController')
 
 // Users
 routes.get('/users', UserController.index)
@@ -27,6 +29,20 @@ routes.get('/meals/:id', MealController.show)
 routes.post('/meals', MealController.create)
 routes.put('/meals/:id', MealController.update)
 routes.delete('/meals/:id', MealController.delete)
+
+// Schedules
+routes.get('/schedules', ScheduleController.index)
+routes.get('/schedules/:id', ScheduleController.show)
+routes.post('/schedules', ScheduleController.create)
+routes.put('/schedules/:id', ScheduleController.update)
+routes.delete('/schedules/:id', ScheduleController.delete)
+
+// Orders
+routes.get('/orders', OrderController.index)
+routes.get('/orders/:id', OrderController.show)
+routes.post('/orders', OrderController.create)
+routes.put('/orders/:id', OrderController.update)
+routes.delete('/orders/:id', OrderController.delete)
 
 // Export
 module.exports = routes

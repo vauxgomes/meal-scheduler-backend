@@ -26,6 +26,9 @@ exports.seed = async function (knex) {
             value: 'auto',
             nice: 'Integrado Automação',
             order: 0
-        }
+        },
+        { class: 'time', value: 'morning', nice: 'Manhã', order: 0 },
+        { class: 'time', value: 'morning', nice: 'Tarde', order: 1 },
+        { class: 'time', value: 'morning', nice: 'Noite', order: 2 }
     ])
 }

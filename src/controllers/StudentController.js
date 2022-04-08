@@ -76,7 +76,7 @@ module.exports = {
                     course,
                     food_restriction
                 })
-                .where({ user_id: id })
+                .where({ id })
 
             return res.status(200).send({
                 success: true,
@@ -97,7 +97,7 @@ module.exports = {
         const { id } = req.params
 
         try {
-            await knex('students').where({ user_id: id }).del()
+            await knex('students').where({ id }).del()
 
             return res.status(200).send({
                 success: true,
