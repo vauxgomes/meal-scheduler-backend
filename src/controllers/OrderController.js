@@ -94,9 +94,20 @@ module.exports = {
 
     // DELETE
     async delete(req, res) {
-        return res.status(200).send({
-            success: true,
-            msg: 'Estudante Removido'
-        })
+        const { id } = req.params
+
+        try {
+            await knex('orders').where({ id }).del()
+
+            return res.status(200).send({
+                success: true,
+                msg: 'order.delete.ok'
+            })
+        } catch (err) {
+            return res.status(404).send({
+                success: false,
+                msg: 'order.delete.nok'
+            })
+        }
     }
 }
