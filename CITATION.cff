@@ -1,0 +1,9 @@
+cff-version: 1.0.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Gomes
+    given-names: Vaux
+    orcid: https://orcid.org/0000-0001-7672-0643
+title: "Meal Scheduler Backend"
+version: 1.0.0
+date-released: 2022-04-07
