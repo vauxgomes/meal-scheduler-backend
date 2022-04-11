@@ -28,7 +28,7 @@ exports.seed = async function (knex) {
             order: 0
         },
         { class: 'time', value: 'morning', nice: 'Manhã', order: 0 },
-        { class: 'time', value: 'morning', nice: 'Tarde', order: 1 },
-        { class: 'time', value: 'morning', nice: 'Noite', order: 2 }
+        { class: 'time', value: 'afternoon', nice: 'Tarde', order: 1 },
+        { class: 'time', value: 'night', nice: 'Noite', order: 2 }
     ])
 }

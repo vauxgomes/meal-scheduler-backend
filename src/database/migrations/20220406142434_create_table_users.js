@@ -2,6 +2,7 @@ exports.up = function (knex) {
     console.log('Migration: USERS')
 
     return knex.schema.createTable('users', function (table) {
+        //t.uuid('id').primary().defaultTo(knex.raw('UUID()'));
         table.increments('id')
 
         table.string('name', 255).notNullable()

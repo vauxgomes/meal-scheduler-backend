@@ -7,6 +7,12 @@
 ## Description
 Basic Node.js backend for managing meals in Brazilian Federal Institutes of Technology.
 
+## Running application on Docker
+```sh
+docker build . -t <your username>/meal-scheduler-backend
+docker run -p 4444:3333 -d <your username>/meal-scheduler-backend --name foodapp
+```
+
 ### Bibtex
 In case you want to cite this project:
 

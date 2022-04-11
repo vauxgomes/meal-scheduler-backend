@@ -1,10 +1,19 @@
 // DB
 const knex = require('../database')
+const lib = require('../lib')
 
 // Controller
 module.exports = {
     // Index
     async index(req, res) {
+        let { visible = null } = req.query
+
+        if (visible === null) {
+            visible = [1, 0]
+        } else {
+            visible = [JSON.parse(visible) ? 1 : 0]
+        }
+
         const meals = await knex
             .select(
                 'id',
@@ -14,10 +23,13 @@ module.exports = {
                 'energy',
                 'carbohydrates',
                 'proteins',
-                'lipids'
+                'lipids',
+                'created_at'
             )
             .from('meals')
+            .whereIn('visible', visible)
 
+        // await lib.delay(4000)
         return res.json(meals)
     },
 
@@ -56,8 +68,15 @@ module.exports = {
     // Update
     async update(req, res) {
         const { id } = req.params
-        const { title, description, energy, carbohydrates, proteins, lipids } =
-            req.body
+        const {
+            title,
+            description,
+            energy,
+            carbohydrates,
+            proteins,
+            lipids,
+            visible
+        } = req.body
 
         try {
             await knex('meals')
@@ -67,7 +86,8 @@ module.exports = {
                     energy,
                     carbohydrates,
                     proteins,
-                    lipids
+                    lipids,
+                    visible
                 })
                 .where({ id })
 

@@ -1,10 +1,26 @@
 // DB
 const knex = require('../database')
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
 // Controller
 module.exports = {
     // Index
     async index(req, res) {
+        let {
+            m: month = new Date().getMonth(),
+            y: year = new Date().getFullYear()
+        } = req.query
+
+        month = Number.parseInt(month)
+        year = Number.parseInt(year)
+
+        const _year = month === 12 ? year + 1 : year
+        const _month = (month % 12) + 1
+
+        // console.log(`FROM: ${year}-${month.toString().padStart(2, '0')}-01 00:00:00`)
+        // console.log(`TO:   ${_year}-${_month.toString().padStart(2, '0')}-01 00:00:00`)
+
         const schedules = await knex
             .select(
                 'schedules.id as id',
@@ -16,12 +32,27 @@ module.exports = {
                 'proteins',
                 'lipids',
                 'date',
-                'lovs.value as time'
+                'lovs.order as time',
+                'lovs.nice as time_nice'
             )
             .from('schedules')
             .innerJoin('meals', 'schedules.meal_id', 'meals.id')
             .innerJoin('lovs', 'schedules.time', 'lovs.id')
+            .where(
+                'schedules.date',
+                '>=',
+                `${year}-${month.toString().padStart(2, '0')}-01 00:00:00`
+            )
+            .where(
+                'date',
+                '<',
+                `${_year}-${_month.toString().padStart(2, '0')}-01 00:00:00`
+            )
+            .orderBy('date', 'asc')
 
+        // console.log(`SIZE: ${schedules.length}\n`)
+
+        // await delay(3000)
         return res.json(schedules)
     },
 
@@ -40,7 +71,8 @@ module.exports = {
                 'proteins',
                 'lipids',
                 'date',
-                'lovs.value as time'
+                'lovs.order as time',
+                'lovs.nice as time_nice'
             )
             .from('schedules')
             .innerJoin('meals', 'schedules.meal_id', 'meals.id')
@@ -64,6 +96,8 @@ module.exports = {
 
             return res.json({ id })
         } catch (err) {
+            console.log(err)
+
             if (err)
                 return res.status(400).json({
                     success: false,

@@ -6,7 +6,6 @@ exports.up = function (knex) {
 
         table
             .integer('meal_id')
-            .unique()
             .references('id')
             .inTable('meals')
             .onDelete('CASCADE')
