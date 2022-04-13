@@ -2,18 +2,16 @@ exports.up = function (knex) {
     console.log('Migration: STUDENTS')
 
     return knex.schema.createTable('students', function (table) {
-        table
-            .integer('user_id')
-            .unique()
-            .references('id')
-            .inTable('users')
-            .onDelete('CASCADE')
-
-        table.integer('course').references('id').inTable('lovs')
+        table.integer('user_id').unsigned().unique().notNullable()
+        
+        table.integer('course').unsigned().notNullable()
         table.boolean('food_restriction').notNullable().defaultTo(false)
 
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
         table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now())
+
+        table.foreign('user_id').references('users.id')
+        table.foreign('course').references('lovs.id')
     })
 }
 

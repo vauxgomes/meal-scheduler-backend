@@ -8,24 +8,24 @@ exports.seed = async function (knex) {
         { class: 'access', value: 'user', nice: 'Usuário', order: 2 },
         { class: 'access', value: 'viewer', nice: 'Visualização', order: 3 },
         { class: 'course', value: 'redes', nice: 'Graduação Redes', order: 0 },
-        { class: 'course', value: 'bio', nice: 'Graduação Biologia', order: 0 },
+        { class: 'course', value: 'bio', nice: 'Graduação Biologia', order: 1 },
         {
             class: 'course',
             value: 'infonet',
             nice: 'Integrado Internet',
-            order: 0
+            order: 2
         },
         {
             class: 'course',
             value: 'eletro',
             nice: 'Integrado Eletromecânica',
-            order: 0
+            order: 3
         },
         {
             class: 'course',
             value: 'auto',
             nice: 'Integrado Automação',
-            order: 0
+            order: 4
         },
         { class: 'time', value: 'morning', nice: 'Manhã', order: 0 },
         { class: 'time', value: 'afternoon', nice: 'Tarde', order: 1 },

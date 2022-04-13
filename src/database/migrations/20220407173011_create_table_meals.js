@@ -2,12 +2,12 @@ exports.up = function (knex) {
     console.log('Migration: MEALS')
 
     return knex.schema.createTable('meals', function (table) {
-        table.increments('id')
+        table.increments('id').primary()
 
         table.string('title', 255).notNullable()
         table.text('description').notNullable()
         table.boolean('visible').notNullable().defaultTo(true)
-        
+
         table.integer('energy').defaultTo(0)
         table.integer('carbohydrates').defaultTo(0)
         table.integer('proteins').defaultTo(0)

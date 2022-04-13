@@ -2,7 +2,7 @@ exports.up = function (knex) {
     console.log('Migration: LIST OF VALUES')
 
     return knex.schema.createTable('lovs', function (table) {
-        table.increments('id')
+        table.increments('id').primary()
 
         table.string('class', 50).notNullable()
         table.string('value', 50).notNullable()

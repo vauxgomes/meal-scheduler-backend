@@ -3,17 +3,19 @@ exports.up = function (knex) {
 
     return knex.schema.createTable('users', function (table) {
         //t.uuid('id').primary().defaultTo(knex.raw('UUID()'));
-        table.increments('id')
+        table.increments('id').primary()
 
         table.string('name', 255).notNullable()
         table.string('username', 20).unique().notNullable()
         table.string('password', 100).notNullable()
 
-        table.integer('access').references('id').inTable('lovs')
+        table.integer('access').unsigned().notNullable()
         table.boolean('active').notNullable().defaultTo(true)
 
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
         table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now())
+
+        table.foreign('access').references('lovs.id')
     })
 }
 

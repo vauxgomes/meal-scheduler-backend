@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+    app:
+        container_name: meal-server
+        build: .
+        command: sh -c "npm run migrate && npm run seed && npm run start"
+        restart: always
+        ports:
+            - 3333:3333
+        volumes:
+            - .:/usr/src/app
+        links:
+            - db
+        depends_on:
+            - db
+
+    db:
+        container_name: meal-db
+        image: mariadb
+        restart: always
+        ports:
+            - 3306:3306
+        environment:
+            - MARIADB_ROOT_PASSWORD=mariadb
+        volumes:
+            - ./setup.sql:/data/application/setup.sql
+        command: --init-file /data/application/setup.sql

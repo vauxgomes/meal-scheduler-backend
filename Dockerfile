@@ -11,6 +11,5 @@ RUN npm install
 # BUNDDLE app source (copying code)
 COPY . .
 
-
 EXPOSE 3333
 CMD [ "node", "src/server.js" ]
