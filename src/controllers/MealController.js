@@ -6,13 +6,8 @@ const lib = require('../lib')
 module.exports = {
     // Index
     async index(req, res) {
-        let { visible = null } = req.query
-
-        if (visible === null) {
-            visible = [1, 0]
-        } else {
-            visible = [JSON.parse(visible) ? 1 : 0]
-        }
+        let { v = null } = req.query
+        v = v == null ? [0, 1] : [v === 'false' || v === 0 ? 0 : 1]
 
         const meals = await knex
             .select(
@@ -27,7 +22,8 @@ module.exports = {
                 'created_at'
             )
             .from('meals')
-            .whereIn('visible', visible)
+            .whereIn('visible', v)
+            .orderBy('title', 'asc')
 
         // await lib.delay(4000)
         return res.json(meals)

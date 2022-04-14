@@ -7,9 +7,11 @@ module.exports = {
     async index(req, res) {
         const students = await knex
             .select(
-                'user_id as id',
+                'user_id',
                 'users.name',
-                'lovs.nice as course',
+                'enrollment_code',
+                'course',
+                'lovs.nice as course_nice',
                 'food_restriction'
             )
             .from('students')
@@ -25,9 +27,11 @@ module.exports = {
 
         const students = await knex
             .select(
-                'user_id as id',
+                'user_id',
                 'users.name',
-                'lovs.nice as course',
+                'enrollment_code',
+                'course',
+                'lovs.nice as course_nice',
                 'food_restriction'
             )
             .from('students')
@@ -41,23 +45,32 @@ module.exports = {
 
     // Create
     async create(req, res) {
-        const { user_id, course, food_restriction } = req.body
+        const {
+            user_id,
+            course,
+            enrollment_code,
+            food_restriction = false
+        } = req.body
 
         try {
             const [id] = await knex('students').insert({
                 user_id,
                 course,
+                enrollment_code,
                 food_restriction
             })
 
-            return res.json({ id })
+            return res.json({
+                success: true,
+                message: 'student.create.ok'
+            })
         } catch (err) {
-            if (err)
+            if (err) {
                 return res.status(400).json({
                     success: false,
                     message: 'student.not.unique'
                 })
-            else
+            } else
                 return res.status(404).json({
                     success: false,
                     message: 'student.create.nok'
@@ -67,16 +80,17 @@ module.exports = {
 
     // Update
     async update(req, res) {
-        const { id } = req.params
-        const { course, food_restriction } = req.body
+        const { user_id } = req.params
+        const { course, food_restriction, enrollment_code } = req.body
 
         try {
             await knex('students')
                 .update({
                     course,
+                    enrollment_code,
                     food_restriction
                 })
-                .where({ id })
+                .where({ user_id })
 
             return res.status(200).send({
                 success: true,
@@ -94,16 +108,20 @@ module.exports = {
 
     // DELETE
     async delete(req, res) {
-        const { id } = req.params
+        const { user_id } = req.params
+
+        console.log('user id')
 
         try {
-            await knex('students').where({ id }).del()
+            await knex('students').where({ user_id }).del()
 
             return res.status(200).send({
                 success: true,
                 msg: 'student.delete.ok'
             })
         } catch (err) {
+            console.log(err)
+
             return res.status(404).send({
                 success: false,
                 msg: 'student.delete.nok'

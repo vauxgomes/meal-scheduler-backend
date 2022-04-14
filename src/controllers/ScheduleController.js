@@ -7,20 +7,20 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 module.exports = {
     // Index
     async index(req, res) {
-        let {
-            m: month = new Date().getMonth(),
-            y: year = new Date().getFullYear()
-        } = req.query
+        let { m: month, y: year } = req.query
 
-        month = Number.parseInt(month)
-        year = Number.parseInt(year)
+        // Month range
+        let currentMonth = new Date(year, month, 1)
+        if (!(currentMonth instanceof Date) || isNaN(currentMonth)) {
+            currentMonth = new Date()
+            currentMonth.setDate(1)
+            currentMonth.setHours(0, 0, 0, 0)
+        }
 
-        const _year = month === 12 ? year + 1 : year
-        const _month = (month % 12) + 1
+        let nextMonth = new Date(currentMonth)
+        nextMonth.setMonth(nextMonth.getMonth() + 1)
 
-        // console.log(`FROM: ${year}-${month.toString().padStart(2, '0')}-01 00:00:00`)
-        // console.log(`TO:   ${_year}-${_month.toString().padStart(2, '0')}-01 00:00:00`)
-
+        //
         const schedules = await knex
             .select(
                 'schedules.id as id',
@@ -41,18 +41,19 @@ module.exports = {
             .where(
                 'schedules.date',
                 '>=',
-                `${year}-${month.toString().padStart(2, '0')}-01 00:00:00`
+                currentMonth.toISOString().slice(0, 10)
             )
-            .where(
-                'date',
-                '<',
-                `${_year}-${_month.toString().padStart(2, '0')}-01 00:00:00`
-            )
+            .andWhere('date', '<', nextMonth.toISOString().slice(0, 10))
             .orderBy('date', 'asc')
 
-        // console.log(`SIZE: ${schedules.length}\n`)
+        console.log(
+            currentMonth.toISOString().slice(0, 10),
+            '-->',
+            nextMonth.toISOString().slice(0, 10),
+            '::',
+            schedules.length
+        )
 
-        // await delay(3000)
         return res.json(schedules)
     },
 
@@ -83,21 +84,57 @@ module.exports = {
         return res.json(schedules)
     },
 
+    // TODAY
+    async today(req, res) {
+        const { time } = req.params
+        const today = new Date()
+
+        const schedule = await knex
+            .select(
+                'schedules.id as id',
+                'title',
+                'description',
+                'date',
+                'lovs.order as time'
+            )
+            .from('schedules')
+            .innerJoin('meals', 'schedules.meal_id', 'meals.id')
+            .innerJoin('lovs', 'schedules.time', 'lovs.id')
+            .where('date', '=', today.toISOString().slice(0, 10))
+            .andWhere('class', 'time')
+            .andWhere('order', time)
+            .first()
+
+        return res.json(schedule)
+    },
+
     // Create
     async create(req, res) {
         const { meal_id, date, time } = req.body
 
         try {
-            const [id] = await knex('schedules').insert({
-                meal_id,
-                date,
-                time
-            })
+            const lov = await knex
+                .select('id')
+                .from('lovs')
+                .where('class', 'time')
+                .andWhere('order', time)
+                .first()
 
-            return res.json({ id })
+            if (lov) {
+                const [id] = await knex('schedules').insert({
+                    meal_id,
+                    date,
+                    time: lov.id
+                })
+
+                return res.json({ id })
+            } else {
+                return res.status(404).json({
+                    success: false,
+                    message: 'schedule.create.nok'
+                })
+            }
         } catch (err) {
-            console.log(err)
-
             if (err)
                 return res.status(400).json({
                     success: false,
@@ -106,7 +143,7 @@ module.exports = {
             else
                 return res.status(404).json({
                     success: false,
-                    message: 'schedule.create.nok'
+                    message: 'schedule.create.err'
                 })
         }
     },
@@ -114,24 +151,16 @@ module.exports = {
     // Update
     async update(req, res) {
         const { id } = req.params
-        const { meal_id, date, time } = req.body
+        const { meal_id } = req.body
 
         try {
-            await knex('schedules')
-                .update({
-                    meal_id,
-                    date,
-                    time
-                })
-                .where({ id })
+            await knex('schedules').update({ meal_id }).where({ id })
 
             return res.status(200).send({
                 success: true,
                 msg: 'schedule.update.ok'
             })
         } catch (err) {
-            console.log(err)
-
             return res.status(404).send({
                 success: false,
                 msg: 'schedule.update.nok'
@@ -144,7 +173,7 @@ module.exports = {
         const { id } = req.params
 
         try {
-            await knex('schedules').where({ user_id: id }).del()
+            await knex('schedules').where({ id }).del()
 
             return res.status(200).send({
                 success: true,

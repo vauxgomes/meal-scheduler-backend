@@ -3,11 +3,15 @@ const express = require('express')
 const routes = express.Router()
 
 // Controllers
+const AccountController = require('./controllers/AccountController')
 const UserController = require('./controllers/UserController')
 const StudentController = require('./controllers/StudentController')
 const MealController = require('./controllers/MealController')
 const ScheduleController = require('./controllers/ScheduleController')
 const OrderController = require('./controllers/OrderController')
+
+// Account
+routes.post('/login', AccountController.authenticate)
 
 // Users
 routes.get('/users', UserController.index)
@@ -20,8 +24,8 @@ routes.delete('/users/:id', UserController.delete)
 routes.get('/students', StudentController.index)
 routes.get('/students/:id', StudentController.show)
 routes.post('/students', StudentController.create)
-routes.put('/students/:id', StudentController.update)
-routes.delete('/students/:id', StudentController.delete)
+routes.put('/students/:user_id', StudentController.update)
+routes.delete('/students/:user_id', StudentController.delete)
 
 // Meals
 routes.get('/meals', MealController.index)
@@ -33,6 +37,7 @@ routes.delete('/meals/:id', MealController.delete)
 // Schedules
 routes.get('/schedules', ScheduleController.index)
 routes.get('/schedules/:id', ScheduleController.show)
+routes.get('/schedules/today/:time', ScheduleController.today)
 routes.post('/schedules', ScheduleController.create)
 routes.put('/schedules/:id', ScheduleController.update)
 routes.delete('/schedules/:id', ScheduleController.delete)

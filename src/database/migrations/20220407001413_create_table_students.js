@@ -3,7 +3,8 @@ exports.up = function (knex) {
 
     return knex.schema.createTable('students', function (table) {
         table.integer('user_id').unsigned().unique().notNullable()
-        
+
+        table.string('enrollment_code').unique().notNullable()
         table.integer('course').unsigned().notNullable()
         table.boolean('food_restriction').notNullable().defaultTo(false)
 

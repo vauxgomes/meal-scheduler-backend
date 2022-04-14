@@ -1,5 +1,7 @@
-const { db } = require('./src/config')
+//
+require('dotenv').config()
 
+//
 module.exports = {
     // Development
     development: {
@@ -17,15 +19,15 @@ module.exports = {
         useNullAsDefault: true
     },
 
-    // Production
-    production: {
+    // Staging
+    staging: {
         client: 'mysql',
         connection: {
-            host: db.host,
-            port: db.port,
-            user: db.user,
-            password: db.password,
-            database: db.database
+            host: process.env.DB_HOST,
+            port: process.env.DB_PORT,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE
         },
         seeds: {
             directory: `${__dirname}/src/database/seeds/production`

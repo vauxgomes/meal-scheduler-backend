@@ -8,8 +8,17 @@ services:
         restart: always
         ports:
             - 3333:3333
+        environment:
+            - NODE_ENV=staging
+            - PORT=3333
+            - HASH_SALT=10
+            - DB_HOST=172.17.0.1
+            - DB_PORT=3306
+            - DB_USER=root
+            - DB_PASSWORD=mariadb
+            - DB_DATABASE=meal_db
         volumes:
-            - .:/usr/src/app
+            - .:/usr/app
         links:
             - db
         depends_on:
@@ -21,8 +30,8 @@ services:
         restart: always
         ports:
             - 3306:3306
+        command: --init-file /data/application/setup.sql
+        volumes:
+            - ./src/database/init/setup.sql:/data/application/setup.sql
         environment:
             - MARIADB_ROOT_PASSWORD=mariadb
-        volumes:
-            - ./setup.sql:/data/application/setup.sql
-        command: --init-file /data/application/setup.sql

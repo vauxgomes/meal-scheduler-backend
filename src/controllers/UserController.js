@@ -1,6 +1,9 @@
 // DB
 const knex = require('../database')
 
+// Encrypt
+const { hashSync } = require('bcrypt')
+
 // Controller
 module.exports = {
     // Index
@@ -25,7 +28,16 @@ module.exports = {
     // Create
     async create(req, res) {
         try {
-            const { name, username, password, access = 3 } = req.body
+            let { name, username, password } = req.body
+            password = hashSync(password, process.env.HASH_SALT)
+
+            const { access } = await knex
+                .select('id')
+                .from('lovs')
+                .where('class', 'access')
+                .andWhere('value', 'user')
+                .orderBy('order')
+
             const [id] = await knex('users').insert({
                 name,
                 username,
@@ -53,9 +65,13 @@ module.exports = {
     // Update
     async update(req, res) {
         const { id } = req.params
-        const { name, username, password, access, active } = req.body
+        let { name, username, password, access, active } = req.body
 
         try {
+            if (password) {
+                password = hashSync(password, salt)
+            }
+
             await knex('users')
                 .update({
                     name,
