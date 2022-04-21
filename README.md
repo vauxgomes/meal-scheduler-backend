@@ -27,20 +27,29 @@ docker run -p 3333:3333 --name meal-server -d <your username>/meal-server
 docker-compose up -d
 ```
 
-## Environment Variables
+## Environment Variables Example
 
 ```
 # Server
-NODE_ENV=development/staging/production
+NODE_ENV=production
 PORT=3333
 
+# Encrypting
+HASH_SALT=10
+
+# TOKEN
+TK_KEY=E8LCmFh2sVmzFFaXx
+TK_EXP=4h
+
 # Database
-DB_HOST=localhost
+DB_HOST=172.17.0.1
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=mariadb
+DB_PASSWORD=VBDp8dsAbv6Utu926jWX
 DB_DATABASE=meal_db
 ```
+
+*`DB_HOST` is set for using Docker
 
 ## Citation
 

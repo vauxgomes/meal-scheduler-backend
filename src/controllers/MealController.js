@@ -1,8 +1,5 @@
-// DB
 const knex = require('../database')
-const lib = require('../lib')
 
-// Controller
 module.exports = {
     // Index
     async index(req, res) {
@@ -46,14 +43,16 @@ module.exports = {
             const [id] = await knex('meals').insert({
                 title,
                 description,
-                energy,
-                carbohydrates,
-                proteins,
-                lipids
+                energy: energy ? energy : 0,
+                carbohydrates: carbohydrates ? carbohydrates : 0,
+                proteins: proteins ? proteins : 0,
+                lipids: lipids ? lipids : 0
             })
 
             return res.json({ id })
         } catch (err) {
+            console.log(err)
+
             return res.status(404).json({
                 success: false,
                 message: 'meal.create.nok'

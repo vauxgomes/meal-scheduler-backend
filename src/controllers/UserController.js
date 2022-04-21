@@ -1,8 +1,6 @@
-// DB
 const knex = require('../database')
-
-// Encrypt
 const { hashSync } = require('bcrypt')
+const { HASH_SALT } = process.env
 
 // Controller
 module.exports = {
@@ -29,7 +27,7 @@ module.exports = {
     async create(req, res) {
         try {
             let { name, username, password } = req.body
-            password = hashSync(password, process.env.HASH_SALT)
+            password = hashSync(password, HASH_SALT)
 
             const { access } = await knex
                 .select('id')

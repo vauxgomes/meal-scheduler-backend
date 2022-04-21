@@ -1,7 +1,11 @@
 exports.seed = async function (knex) {
     console.log('SEEDS: LOVS')
 
-    await knex('lovs').del()
+    if (await knex.select('id').from('lovs').first()) {
+        console.log(' - ABORTED: Table has already being populated')
+        return
+    }
+
     await knex('lovs').insert([
         { class: 'access', value: 'root', nice: 'Root', order: 0 },
         { class: 'access', value: 'admin', nice: 'Administrador', order: 1 },

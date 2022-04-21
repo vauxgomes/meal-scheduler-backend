@@ -1,9 +1,5 @@
-// DB
 const knex = require('../database')
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
-// Controller
 module.exports = {
     // Index
     async index(req, res) {
@@ -46,13 +42,13 @@ module.exports = {
             .andWhere('date', '<', nextMonth.toISOString().slice(0, 10))
             .orderBy('date', 'asc')
 
-        console.log(
-            currentMonth.toISOString().slice(0, 10),
-            '-->',
-            nextMonth.toISOString().slice(0, 10),
-            '::',
-            schedules.length
-        )
+        // console.log(
+        //     currentMonth.toISOString().slice(0, 10),
+        //     '-->',
+        //     nextMonth.toISOString().slice(0, 10),
+        //     '::',
+        //     schedules.length
+        // )
 
         return res.json(schedules)
     },
@@ -86,8 +82,7 @@ module.exports = {
 
     // TODAY
     async today(req, res) {
-        const { time } = req.params
-        const today = new Date()
+        const { date, time } = req.params
 
         const schedule = await knex
             .select(
@@ -100,7 +95,7 @@ module.exports = {
             .from('schedules')
             .innerJoin('meals', 'schedules.meal_id', 'meals.id')
             .innerJoin('lovs', 'schedules.time', 'lovs.id')
-            .where('date', '=', today.toISOString().slice(0, 10))
+            .where('date', '=', date)
             .andWhere('class', 'time')
             .andWhere('order', time)
             .first()

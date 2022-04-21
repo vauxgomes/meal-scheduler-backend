@@ -1,7 +1,5 @@
-// DB
 const knex = require('../database')
 
-// Controller
 module.exports = {
     // Index
     async index(req, res) {

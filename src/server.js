@@ -1,7 +1,13 @@
 // Imports
 const express = require('express')
 const cors = require('cors')
-//
+
+const dotenv = require('dotenv')
+dotenv.config()
+
+const { PORT, NODE_ENV, TIME_ZONE } = process.env
+
+// Routes
 const routes = require('./routes')
 
 // App
@@ -12,8 +18,10 @@ app.use(express.json())
 app.use(routes)
 
 // PORT
-app.listen(process.env.PORT)
+app.listen(PORT)
 
 // Start message
-console.log(` - Server Running on PORT ${process.env.PORT}`)
-console.log(` - ENVIRONMENT: ${process.env.NODE_ENV}`)
+console.log('Server Running')
+console.log(` - PORT ${PORT}`)
+console.log(` - ENVIRONMENT: ${NODE_ENV}`)
+console.log(` - TIMEZONE: ${TIME_ZONE}`)

@@ -1,10 +1,16 @@
-const { hashSync } = require('bcrypt')
-require('dotenv').config()
+const dotenv = require('dotenv')
+dotenv.config()
 
-const salt = Number(process.env.HASH_SALT)
+const { hashSync } = require('bcrypt')
+const ENC_SALT = Number(process.env.ENC_SALT)
 
 exports.seed = async function (knex) {
     console.log('SEEDS: USERS')
+
+    if (await knex.select('id').from('users').first()) {
+        console.log(' - ABORTED: Table has already being populated')
+        return
+    }
 
     const accesses = await knex
         .select('id')
@@ -12,18 +18,18 @@ exports.seed = async function (knex) {
         .where('class', 'access')
         .orderBy('order')
 
-    await knex('users').del()
+    // await knex('users').del()
     await knex('users').insert([
         {
             name: 'Root',
             username: 'root',
-            password: hashSync('root$enh4', salt),
+            password: hashSync('root$enh4', ENC_SALT),
             access: accesses[0].id
         },
         {
             name: 'Admin',
             username: 'admin',
-            password: hashSync('admin$enh4', salt),
+            password: hashSync('ifce_admin', ENC_SALT),
             access: accesses[1].id
         }
     ])
