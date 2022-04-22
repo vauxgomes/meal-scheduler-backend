@@ -24,10 +24,10 @@
     },
     "homepage": "https://github.com/vauxgomes/meal-scheduler-backend#readme",
     "devDependencies": {
-        "nodemon": "^2.0.15"
+        "nodemon": "^2.0.15",
+        "@vscode/sqlite3": "^5.0.8"
     },
     "dependencies": {
-        "@vscode/sqlite3": "^5.0.8",
         "bcrypt": "^5.0.1",
         "cors": "^2.8.5",
         "dotenv": "^16.0.0",
