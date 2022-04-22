@@ -2,11 +2,11 @@
 FROM node:16
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
 # INSTALL app dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install --silent
 
 # BUNDDLE app source (copying code)
 COPY . .
@@ -14,6 +14,7 @@ COPY . .
 # ENV:NODE
 ENV NODE_ENV=production
 ENV PORT=3333
+ENV TIME_ZONE=America/Fortaleza
 
 # ENV:Encrypting
 ENV HASH_SALT=10

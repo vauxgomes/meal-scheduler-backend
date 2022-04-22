@@ -1,4 +1,5 @@
 const knex = require('../database')
+const uuid = require('uuid')
 
 module.exports = {
     // Index
@@ -116,7 +117,9 @@ module.exports = {
                 .first()
 
             if (lov) {
-                const [id] = await knex('schedules').insert({
+                const id = uuid.v4()
+                await knex('schedules').insert({
+                    id,
                     meal_id,
                     date,
                     time: lov.id

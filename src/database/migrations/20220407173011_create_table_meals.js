@@ -2,7 +2,7 @@ exports.up = function (knex) {
     console.log('Migration: MEALS')
 
     return knex.schema.createTable('meals', function (table) {
-        table.increments('id').primary()
+        table.uuid('id').primary().defaultTo(knex.raw('UUID()'))
 
         table.string('title', 255).notNullable()
         table.text('description').notNullable()

@@ -51,7 +51,7 @@ module.exports = {
         } = req.body
 
         try {
-            const [id] = await knex('students').insert({
+            await knex('students').insert({
                 user_id,
                 course,
                 enrollment_code,

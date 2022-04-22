@@ -1,4 +1,5 @@
 const knex = require('../database')
+const uuid = require('uuid')
 
 module.exports = {
     // Index
@@ -48,7 +49,9 @@ module.exports = {
         const { user_id, schedule_id } = req.body
 
         try {
-            const [id] = await knex('orders').insert({
+            const id = uuid.v4()
+            await knex('orders').insert({
+                id,
                 user_id,
                 schedule_id
             })

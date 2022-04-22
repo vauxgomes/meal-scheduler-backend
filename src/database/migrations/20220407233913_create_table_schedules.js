@@ -2,9 +2,9 @@ exports.up = function (knex) {
     console.log('Migration: SCHEDULES')
 
     return knex.schema.createTable('schedules', function (table) {
-        table.increments('id').primary()
+        table.uuid('id').primary().defaultTo(knex.raw('UUID()'))
 
-        table.integer('meal_id').unsigned().notNullable()
+        table.uuid('meal_id').notNullable()
         table.integer('time').unsigned().notNullable()
         table.date('date').notNullable()
 

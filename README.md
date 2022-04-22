@@ -33,6 +33,7 @@ docker-compose up -d
 # Server
 NODE_ENV=production
 PORT=3333
+ENV TIME_ZONE=America/Fortaleza
 
 # Encrypting
 HASH_SALT=10

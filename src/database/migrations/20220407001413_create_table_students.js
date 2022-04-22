@@ -2,7 +2,7 @@ exports.up = function (knex) {
     console.log('Migration: STUDENTS')
 
     return knex.schema.createTable('students', function (table) {
-        table.integer('user_id').unsigned().unique().notNullable()
+        table.uuid('user_id').unique().notNullable()
 
         table.string('enrollment_code').unique().notNullable()
         table.integer('course').unsigned().notNullable()

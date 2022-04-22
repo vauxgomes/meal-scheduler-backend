@@ -21,7 +21,7 @@ app.use(routes)
 app.listen(PORT)
 
 // Start message
-console.log('Server Running')
-console.log(` - PORT ${PORT}`)
-console.log(` - ENVIRONMENT: ${NODE_ENV}`)
-console.log(` - TIMEZONE: ${TIME_ZONE}`)
+console.log('\x1b[32mServer Running\x1b[0m')
+console.log(' - \x1b[2mPORT:\x1b[0m', PORT)
+console.log(' - \x1b[2mENVIRONMENT:\x1b[0m', NODE_ENV)
+console.log(' - \x1b[2mTIMEZONE:\x1b[0m', TIME_ZONE)

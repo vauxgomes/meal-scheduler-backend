@@ -1,4 +1,6 @@
 const knex = require('../database')
+const uuid = require('uuid')
+
 const { hashSync } = require('bcrypt')
 const { HASH_SALT } = process.env
 
@@ -36,7 +38,9 @@ module.exports = {
                 .andWhere('value', 'user')
                 .orderBy('order')
 
-            const [id] = await knex('users').insert({
+            const id = uuid.v4()
+            await knex('users').insert({
+                id,
                 name,
                 username,
                 password,

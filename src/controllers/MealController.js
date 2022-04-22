@@ -1,4 +1,5 @@
 const knex = require('../database')
+const uuid = require('uuid')
 
 module.exports = {
     // Index
@@ -21,8 +22,9 @@ module.exports = {
             .from('meals')
             .whereIn('visible', v)
             .orderBy('title', 'asc')
+            .orderBy('description', 'asc')
+            .orderBy('created_at', 'asc')
 
-        // await lib.delay(4000)
         return res.json(meals)
     },
 
@@ -40,7 +42,9 @@ module.exports = {
             req.body
 
         try {
-            const [id] = await knex('meals').insert({
+            const id = uuid.v4()
+            await knex('meals').insert({
+                id,
                 title,
                 description,
                 energy: energy ? energy : 0,

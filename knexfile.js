@@ -16,7 +16,7 @@ module.exports = {
             directory: `${__dirname}/src/database/migrations`
         },
         seeds: {
-            directory: `${__dirname}/src/database/seeds/development`
+            directory: `${__dirname}/src/database/seeds/`
         },
         useNullAsDefault: true
     },
@@ -32,7 +32,7 @@ module.exports = {
             database: DB_DATABASE
         },
         seeds: {
-            directory: `${__dirname}/src/database/seeds/production`
+            directory: `${__dirname}/src/database/seeds/`
         },
         migrations: {
             tableName: 'knex_migrations',

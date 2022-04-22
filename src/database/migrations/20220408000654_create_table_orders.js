@@ -2,10 +2,10 @@ exports.up = function (knex) {
     console.log('Migration: ORDERS')
 
     return knex.schema.createTable('orders', function (table) {
-        table.increments('id').primary()
+        table.uuid('id').primary().defaultTo(knex.raw('UUID()'))
 
-        table.integer('user_id').unsigned().unique().notNullable()
-        table.integer('schedule_id').unsigned().unique().notNullable()
+        table.uuid('user_id').unique().notNullable()
+        table.uuid('schedule_id').unique().notNullable()
         table.boolean('like').defaultTo(null)
 
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
