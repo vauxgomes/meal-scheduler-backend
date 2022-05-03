@@ -1,8 +1,9 @@
 exports.up = function (knex) {
     console.log('Migration: SCHEDULES')
+    const uuidFn = knex.client.config.uuid
 
     return knex.schema.createTable('schedules', function (table) {
-        table.uuid('id').primary().defaultTo(knex.raw('UUID()'))
+        table.uuid('id').primary().defaultTo(knex.raw(uuidFn))
 
         table.uuid('meal_id').notNullable()
         table.integer('time').unsigned().notNullable()

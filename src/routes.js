@@ -1,7 +1,10 @@
 // Imports
 const express = require('express')
 const routes = express.Router()
+
+// Middleware
 const auth = require('./middleware/auth')
+const { accesses, roles } = require('./middleware/roles')
 
 // Controllers
 const AccountController = require('./controllers/AccountController')
@@ -13,36 +16,117 @@ const OrderController = require('./controllers/OrderController')
 
 // Account
 routes.post('/login', AccountController.register)
+
 // Today
 routes.get('/schedules/today/:date/:time', ScheduleController.today)
 
 // Users
-routes.get('/users', auth, UserController.index)
+routes.get(
+    '/users',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    UserController.index
+)
 routes.get('/users/:id', auth, UserController.show)
-routes.post('/users', auth, UserController.create)
+routes.post(
+    '/users',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    UserController.create
+)
 routes.put('/users/:id', auth, UserController.update)
-routes.delete('/users/:id', auth, UserController.delete)
+routes.delete(
+    '/users/:id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    UserController.delete
+)
 
 // Students
-routes.get('/students', auth, StudentController.index)
+routes.get(
+    '/students',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    StudentController.index
+)
 routes.get('/students/:id', auth, StudentController.show)
-routes.post('/students', auth, StudentController.create)
+routes.post(
+    '/students',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    StudentController.create
+)
 routes.put('/students/:user_id', auth, StudentController.update)
-routes.delete('/students/:user_id', auth, StudentController.delete)
+routes.delete(
+    '/students/:user_id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    StudentController.delete
+)
 
 // Meals
-routes.get('/meals', auth, MealController.index)
-routes.get('/meals/:id', auth, MealController.show)
-routes.post('/meals', auth, MealController.create)
-routes.put('/meals/:id', auth, MealController.update)
-routes.delete('/meals/:id', auth, MealController.delete)
+routes.get(
+    '/meals',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    MealController.index
+)
+routes.get(
+    '/meals/:id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    MealController.show
+)
+routes.post(
+    '/meals',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    MealController.create
+)
+routes.put(
+    '/meals/:id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    MealController.update
+)
+routes.delete(
+    '/meals/:id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    MealController.delete
+)
 
 // Schedules
-routes.get('/schedules', auth, ScheduleController.index)
-routes.get('/schedules/:id', auth, ScheduleController.show)
-routes.post('/schedules', auth, ScheduleController.create)
-routes.put('/schedules/:id', auth, ScheduleController.update)
-routes.delete('/schedules/:id', auth, ScheduleController.delete)
+routes.get(
+    '/schedules',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    ScheduleController.index
+)
+routes.get(
+    '/schedules/:id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    ScheduleController.show
+)
+routes.post(
+    '/schedules',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    ScheduleController.create
+)
+routes.put(
+    '/schedules/:id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    ScheduleController.update
+)
+routes.delete(
+    '/schedules/:id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    ScheduleController.delete
+)
 
 // Orders
 routes.get('/orders', auth, OrderController.index)

@@ -1,7 +1,8 @@
 const dotenv = require('dotenv')
 dotenv.config()
 
-const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env
+const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE, DB_CONN_STR } =
+    process.env
 
 //
 module.exports = {
@@ -21,8 +22,8 @@ module.exports = {
         useNullAsDefault: true
     },
 
-    // Production
-    production: {
+    // Staging
+    staging: {
         client: 'mysql',
         connection: {
             host: DB_HOST,
@@ -37,6 +38,25 @@ module.exports = {
         migrations: {
             tableName: 'knex_migrations',
             directory: `${__dirname}/src/database/migrations`
-        }
+        },
+        uuid: 'UUID()'
+    },
+
+    // Production
+    production: {
+        client: 'pg',
+        connection: {
+            connectionString: DB_CONN_STR,
+            ssl: { rejectUnauthorized: false }
+        },
+        searchPath: ['knex', 'public'],
+        seeds: {
+            directory: `${__dirname}/src/database/seeds/`
+        },
+        migrations: {
+            tableName: 'knex_migrations',
+            directory: `${__dirname}/src/database/migrations`
+        },
+        uuid: 'gen_random_uuid()'
     }
 }

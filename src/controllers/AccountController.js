@@ -12,7 +12,7 @@ module.exports = {
             const user = await knex
                 .select(
                     'users.id as id',
-                    'lovs.class as access_value',
+                    'lovs.value as access_value',
                     'lovs.order as access_level',
                     'password'
                 )

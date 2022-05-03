@@ -1,8 +1,9 @@
 exports.up = function (knex) {
     console.log('Migration: USERS')
+    const uuidFn = knex.client.config.uuid
 
     return knex.schema.createTable('users', function (table) {
-        table.uuid('id').primary().defaultTo(knex.raw('UUID()'));
+        table.uuid('id').primary().defaultTo(knex.raw(uuidFn))
         // table.increments('id').primary()
 
         table.string('name', 255).notNullable()

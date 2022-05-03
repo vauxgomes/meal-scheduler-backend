@@ -2,7 +2,7 @@ const knex = require('../database')
 const uuid = require('uuid')
 
 const { hashSync } = require('bcrypt')
-const { HASH_SALT } = process.env
+const { ENC_SALT } = process.env
 
 // Controller
 module.exports = {
@@ -29,14 +29,15 @@ module.exports = {
     async create(req, res) {
         try {
             let { name, username, password } = req.body
-            password = hashSync(password, HASH_SALT)
+            password = hashSync(password, Number(ENC_SALT))
 
-            const { access } = await knex
+            const { id: access } = await knex
                 .select('id')
                 .from('lovs')
                 .where('class', 'access')
                 .andWhere('value', 'user')
                 .orderBy('order')
+                .first()
 
             const id = uuid.v4()
             await knex('users').insert({
@@ -71,7 +72,7 @@ module.exports = {
 
         try {
             if (password) {
-                password = hashSync(password, salt)
+                password = hashSync(password, ENC_SALT)
             }
 
             await knex('users')
