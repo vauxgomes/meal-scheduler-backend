@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
 
 module.exports = (req, res, next) => {
-    const { authorization } = req.headers
+    const { authorization: token } = req.headers
 
-    if (!authorization) {
+    if (!token) {
         return res.json({
             success: false,
             message: 'user.authentication.required'
@@ -11,8 +11,6 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        // Cutting 'Bearer ' string from authentication token
-        const token = authorization.slice(7, authorization.length)
         req.user = jwt.verify(token, process.env.TK_KEY)
     } catch (err) {
         return res.status(401).send({

@@ -12,7 +12,7 @@ RUN npm install --silent
 COPY . .
 
 # ENV:NODE
-ENV NODE_ENV=production
+ENV NODE_ENV=staging
 ENV PORT=3333
 ENV TIME_ZONE=America/Fortaleza
 

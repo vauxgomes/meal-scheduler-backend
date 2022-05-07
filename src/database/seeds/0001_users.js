@@ -23,13 +23,13 @@ exports.seed = async function (knex) {
         {
             name: 'Root',
             username: 'root',
-            password: hashSync('root$enh4', ENC_SALT),
+            password: hashSync('root', ENC_SALT),
             access: accesses[0].id
         },
         {
             name: 'Admin',
             username: 'admin',
-            password: hashSync('ifce_admin', ENC_SALT),
+            password: hashSync('admin', ENC_SALT),
             access: accesses[1].id
         }
     ])

@@ -39,7 +39,11 @@ module.exports = {
                 .orderBy('order')
                 .first()
 
+            // Returning is not supported by all db types used in 
+            // Knexfile.js, therefore it is necessary to generate 
+            // our own uuid
             const id = uuid.v4()
+
             await knex('users').insert({
                 id,
                 name,

@@ -14,6 +14,22 @@
 
 Basic Node.js backend for managing meals in Brazilian Federal Institutes of Technology.
 
+## Development Installation
+
+After cloning this repository...
+
+```sh
+# Install packages
+npm install # may or may not need sudo permission
+
+# Create db/
+mkdir db
+
+# Use knex to set the database
+npx knex migrate:latest --env development
+npx knex seed:run --env development
+```
+
 ## Running application on Docker
 
 ```sh
@@ -24,33 +40,66 @@ docker run -p 3333:3333 --name meal-server -d <your username>/meal-server
 ## Running with docker-compose
 
 ```sh
+# Start
 docker-compose up -d
+
+# Stop containers
+docker-compose down
 ```
+
+> Both docker and docker-compose is set to use the `staging` profile.
 
 ## Environment Variables Example
+### Development Profile
 
-```
+```sh
 # Server
 NODE_ENV=production
 PORT=3333
-ENV TIME_ZONE=America/Fortaleza
+TIME_ZONE=America/Fortaleza
 
 # Encrypting
 HASH_SALT=10
 
 # TOKEN
-TK_KEY=E8LCmFh2sVmzFFaXx
+TK_KEY=<TOKEN SECRET KEY>
 TK_EXP=4h
+```
 
+### Staging Profile (MySQL on Docker)
+
+For running Knex with MySQL append the following variables to the development variables within `.env`.
+
+```sh
 # Database
 DB_HOST=172.17.0.1
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=VBDp8dsAbv6Utu926jWX
-DB_DATABASE=meal_db
+DB_PASSWORD=<DB PASSWORD> # Fill here
+DB_DATABASE=<DATABASE NAME> # Fill here
 ```
 
-*`DB_HOST` is set for using Docker
+*`DB_HOST` is set for using Docker. It may not be the best practice.
+
+### PostGresql
+
+For running Knex with MySQL append the following variables to the development variables within `.env`.
+
+```sh
+# Database
+DB_CONN_STR=<PG CONNECTION STRING> # Fill here
+```
+
+For PostGresql it is required to activate an extension before running Knex migration scripts:
+
+```sql
+-- ALLOW THE FOLLOWING EXTENSION FOR CREATING UUIDs
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+ALTER EXTENSION "uuid-ossp" SET SCHEMA public;
+
+-- CHECK IF IT IS WORKING
+SELECT gen_random_uuid();
+```
 
 ## Citation
 

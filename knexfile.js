@@ -19,7 +19,8 @@ module.exports = {
         seeds: {
             directory: `${__dirname}/src/database/seeds/`
         },
-        useNullAsDefault: true
+        useNullAsDefault: true,
+        uuid: `(lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))),2) || '-' || substr('89ab',abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))),2) || '-' || lower(hex(randomblob(6))))`
     },
 
     // Staging
@@ -32,14 +33,14 @@ module.exports = {
             password: DB_PASSWORD,
             database: DB_DATABASE
         },
-        seeds: {
-            directory: `${__dirname}/src/database/seeds/`
-        },
         migrations: {
             tableName: 'knex_migrations',
             directory: `${__dirname}/src/database/migrations`
         },
-        uuid: 'UUID()'
+        seeds: {
+            directory: `${__dirname}/src/database/seeds/`
+        },
+        uuid: '(UUID())'
     },
 
     // Production
@@ -50,12 +51,12 @@ module.exports = {
             ssl: { rejectUnauthorized: false }
         },
         searchPath: ['knex', 'public'],
-        seeds: {
-            directory: `${__dirname}/src/database/seeds/`
-        },
         migrations: {
             tableName: 'knex_migrations',
             directory: `${__dirname}/src/database/migrations`
+        },
+        seeds: {
+            directory: `${__dirname}/src/database/seeds/`
         },
         uuid: 'gen_random_uuid()'
     }

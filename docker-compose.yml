@@ -11,7 +11,7 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         environment:
-            - NODE_ENV=production
+            - NODE_ENV=staging
             - PORT=3333
             - TIME_ZONE=America/Fortaleza
             - ENC_SALT=10
