@@ -1,21 +1,10 @@
 const knex = require('../database')
-const uuid = require('uuid')
 
 module.exports = {
     // Index
     async index(req, res) {
         let { m: month, y: year } = req.query
-
-        // Month range
-        let currentMonth = new Date(year, month, 1)
-        if (!(currentMonth instanceof Date) || isNaN(currentMonth)) {
-            currentMonth = new Date()
-            currentMonth.setDate(1)
-            currentMonth.setHours(0, 0, 0, 0)
-        }
-
-        let nextMonth = new Date(currentMonth)
-        nextMonth.setMonth(nextMonth.getMonth() + 1)
+        const [start, ending] = getMonthTimeFrame(month, year)
 
         //
         const schedules = await knex
@@ -35,21 +24,9 @@ module.exports = {
             .from('schedules')
             .innerJoin('meals', 'schedules.meal_id', 'meals.id')
             .innerJoin('lovs', 'schedules.time', 'lovs.id')
-            .where(
-                'schedules.date',
-                '>=',
-                currentMonth.toISOString().slice(0, 10)
-            )
-            .andWhere('date', '<', nextMonth.toISOString().slice(0, 10))
+            .where('schedules.date', '>=', start.toISOString().slice(0, 10))
+            .andWhere('date', '<', ending.toISOString().slice(0, 10))
             .orderBy('date', 'asc')
-
-        // console.log(
-        //     currentMonth.toISOString().slice(0, 10),
-        //     '-->',
-        //     nextMonth.toISOString().slice(0, 10),
-        //     '::',
-        //     schedules.length
-        // )
 
         return res.json(schedules)
     },
@@ -81,29 +58,6 @@ module.exports = {
         return res.json(schedules)
     },
 
-    // TODAY
-    async today(req, res) {
-        const { date, time } = req.params
-
-        const schedule = await knex
-            .select(
-                'schedules.id as id',
-                'title',
-                'description',
-                'date',
-                'lovs.order as time'
-            )
-            .from('schedules')
-            .innerJoin('meals', 'schedules.meal_id', 'meals.id')
-            .innerJoin('lovs', 'schedules.time', 'lovs.id')
-            .where('date', '=', date)
-            .andWhere('class', 'time')
-            .andWhere('order', time)
-            .first()
-
-        return res.json(schedule)
-    },
-
     // Create
     async create(req, res) {
         const { meal_id, date, time } = req.body
@@ -117,19 +71,28 @@ module.exports = {
                 .first()
 
             if (lov) {
-                const id = uuid.v4()
                 await knex('schedules').insert({
-                    id,
                     meal_id,
                     date,
                     time: lov.id
                 })
 
-                return res.json({ id })
+                const schedule = await knex
+                    .select('id')
+                    .from('schedules')
+                    .orderBy('created_at', 'desc')
+                    .limit(1)
+                    .first()
+
+                return res.json({
+                    success: true,
+                    message: 'schedule.create.ok',
+                    schedule
+                })
             } else {
                 return res.status(404).json({
                     success: false,
-                    message: 'schedule.create.nok'
+                    message: 'schedule.create.time.nok'
                 })
             }
         } catch (err) {
@@ -184,4 +147,33 @@ module.exports = {
             })
         }
     }
+}
+
+const getMonthTimeFrame = (month, year, verbosity = false) => {
+    // Set date
+    let currentMonth = new Date(year, month, 1)
+
+    // Possible errors
+    if (!(currentMonth instanceof Date) || isNaN(currentMonth)) {
+        currentMonth = new Date()
+        currentMonth.setMinutes(
+            currentMonth.getMinutes() - currentMonth.getTimezoneOffset()
+        )
+
+        currentMonth.setDate(1)
+        currentMonth.setHours(0, 0, 0, 0)
+    }
+
+    // Set limit date
+    let nextMonth = new Date(currentMonth)
+    nextMonth.setMonth(nextMonth.getMonth() + 1)
+
+    // Print
+    if (verbosity)
+        console.log(
+            currentMonth.toISOString().slice(0, 10),
+            nextMonth.toISOString().slice(0, 10)
+        )
+
+    return [currentMonth, nextMonth]
 }

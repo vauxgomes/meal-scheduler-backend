@@ -1,22 +1,25 @@
 const knex = require('../database')
-const uuid = require('uuid')
 
 module.exports = {
     // Index
     async index(req, res) {
+        const { id: user_id } = req.user
         const orders = await knex
             .select(
                 'orders.id as id',
-                'user_id',
-                'users.name',
+                'meals.title',
+                'meals.description',
                 'schedules.date',
-                'lovs.value as time',
+                'lovs.order as time',
                 'like'
             )
             .from('orders')
-            .innerJoin('users', 'orders.user_id', 'users.id')
             .innerJoin('schedules', 'orders.schedule_id', 'schedules.id')
+            .innerJoin('meals', 'schedules.meal_id', 'meals.id')
             .innerJoin('lovs', 'schedules.time', 'lovs.id')
+            .where('orders.user_id', user_id)
+            .orderBy('orders.created_at', 'asc')
+            .limit(30)
 
         return res.json(orders)
     },
@@ -24,21 +27,23 @@ module.exports = {
     // Show
     async show(req, res) {
         const { id } = req.params
+        const { id: user_id } = req.user
 
         const orders = await knex
             .select(
                 'orders.id as id',
-                'user_id',
-                'users.name',
+                'meals.title',
+                'meals.description',
                 'schedules.date',
-                'lovs.value as time',
+                'lovs.order as time',
                 'like'
             )
             .from('orders')
-            .innerJoin('users', 'orders.user_id', 'users.id')
             .innerJoin('schedules', 'orders.schedule_id', 'schedules.id')
+            .innerJoin('meals', 'schedules.meal_id', 'meals.id')
             .innerJoin('lovs', 'schedules.time', 'lovs.id')
             .where('orders.id', id)
+            .andWhere({ user_id })
             .first()
 
         return res.json(orders)
@@ -46,17 +51,27 @@ module.exports = {
 
     // Create
     async create(req, res) {
-        const { user_id, schedule_id } = req.body
+        const { id: user_id } = req.user
+        const { schedule_id } = req.body
 
         try {
-            const id = uuid.v4()
             await knex('orders').insert({
-                id,
                 user_id,
                 schedule_id
             })
 
-            return res.json({ id })
+            const order = await knex
+                .select('id')
+                .from('orders')
+                .orderBy('created_at', 'desc')
+                .limit(1)
+                .first()
+
+            return res.json({
+                success: true,
+                message: 'order.create.ok',
+                order
+            })
         } catch (err) {
             if (err)
                 return res.status(400).json({
@@ -84,8 +99,6 @@ module.exports = {
                 msg: 'order.update.ok'
             })
         } catch (err) {
-            console.log(err)
-
             return res.status(404).send({
                 success: false,
                 msg: 'order.update.nok'

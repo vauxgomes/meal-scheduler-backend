@@ -10,7 +10,7 @@ const roles = (permissions) => {
         if (!permissions.includes(req.user.access_value)) {
             return res.status(401).json({
                 success: false,
-                message: 'user.authorization.forbidden'
+                message: 'user.permission.denied'
             })
         }
 

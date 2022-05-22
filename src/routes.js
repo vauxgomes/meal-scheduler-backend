@@ -13,12 +13,10 @@ const StudentController = require('./controllers/StudentController')
 const MealController = require('./controllers/MealController')
 const ScheduleController = require('./controllers/ScheduleController')
 const OrderController = require('./controllers/OrderController')
+const WeekController = require('./controllers/WeekController')
 
 // Account
 routes.post('/login', AccountController.register)
-
-// Today
-routes.get('/schedules/today/:date/:time', ScheduleController.today)
 
 // Users
 routes.get(
@@ -129,11 +127,13 @@ routes.delete(
 )
 
 // Orders
-routes.get('/orders', auth, OrderController.index)
-routes.get('/orders/:id', auth, OrderController.show)
-routes.post('/orders', auth, OrderController.create)
-routes.put('/orders/:id', auth, OrderController.update)
-routes.delete('/orders/:id', auth, OrderController.delete)
+routes.get('/orders', auth, roles([accesses.USER]), OrderController.index)
+routes.get('/orders/:id', auth, roles([accesses.USER]), OrderController.show)
+routes.post('/orders', auth, roles([accesses.USER]), OrderController.create)
+routes.put('/orders/:id', auth, roles([accesses.USER]), OrderController.update)
+
+// Weeks
+routes.get('/weeks', auth, roles([accesses.USER]), WeekController.index)
 
 // Export
 module.exports = routes

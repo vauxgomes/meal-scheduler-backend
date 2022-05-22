@@ -1,5 +1,4 @@
 const knex = require('../database')
-const uuid = require('uuid')
 
 module.exports = {
     // Index
@@ -42,9 +41,7 @@ module.exports = {
             req.body
 
         try {
-            const id = uuid.v4()
             await knex('meals').insert({
-                id,
                 title,
                 description,
                 energy: energy ? energy : 0,
@@ -53,10 +50,19 @@ module.exports = {
                 lipids: lipids ? lipids : 0
             })
 
-            return res.json({ id })
-        } catch (err) {
-            console.log(err)
+            const meal = await knex
+                .select('id')
+                .from('meals')
+                .orderBy('created_at', 'desc')
+                .limit(1)
+                .first()
 
+            return res.json({
+                success: true,
+                message: 'meal.create.ok',
+                meal
+            })
+        } catch (err) {
             return res.status(404).json({
                 success: false,
                 message: 'meal.create.nok'

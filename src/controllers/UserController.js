@@ -1,5 +1,4 @@
 const knex = require('../database')
-const uuid = require('uuid')
 
 const { hashSync } = require('bcrypt')
 const { ENC_SALT } = process.env
@@ -39,20 +38,25 @@ module.exports = {
                 .orderBy('order')
                 .first()
 
-            // Returning is not supported by all db types used in 
-            // Knexfile.js, therefore it is necessary to generate 
-            // our own uuid
-            const id = uuid.v4()
-
             await knex('users').insert({
-                id,
                 name,
                 username,
                 password,
                 access
             })
 
-            return res.json({ id })
+            const user = await knex
+                .select('id')
+                .from('users')
+                .orderBy('created_at', 'desc')
+                .limit(1)
+                .first()
+
+            return res.json({
+                success: true,
+                message: 'user.create.ok',
+                user
+            })
         } catch (err) {
             console.log(err)
 
