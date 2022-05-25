@@ -86,6 +86,55 @@ module.exports = {
         }
     },
 
+    // Create
+    async createOnBehalfOf(req, res) {
+        const { enrollment_code } = req.params
+        const { schedule_id } = req.body
+
+        try {
+            const user = await knex('students')
+                .select('user_id')
+                .where({ enrollment_code })
+                .first()
+
+            if (!user) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'order.student.unidentified'
+                })
+            }
+
+            await knex('orders').insert({
+                user_id: user.user_id,
+                schedule_id
+            })
+
+            const order = await knex
+                .select('id')
+                .from('orders')
+                .orderBy('created_at', 'desc')
+                .limit(1)
+                .first()
+
+            return res.json({
+                success: true,
+                message: 'order.create.ok',
+                order
+            })
+        } catch (err) {
+            if (err)
+                return res.status(400).json({
+                    success: false,
+                    message: 'order.not.unique'
+                })
+            else
+                return res.status(404).json({
+                    success: false,
+                    message: 'order.create.nok'
+                })
+        }
+    },
+
     // Update
     async update(req, res) {
         const { id } = req.params

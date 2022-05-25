@@ -132,6 +132,14 @@ routes.get('/orders/:id', auth, roles([accesses.USER]), OrderController.show)
 routes.post('/orders', auth, roles([accesses.USER]), OrderController.create)
 routes.put('/orders/:id', auth, roles([accesses.USER]), OrderController.update)
 
+// Orders ADMIN
+routes.post(
+    '/orders/onbehalfof/student/:enrollment_code',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    OrderController.createOnBehalfOf
+)
+
 // Weeks
 routes.get('/weeks', auth, roles([accesses.USER]), WeekController.index)
 
