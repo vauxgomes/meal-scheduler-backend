@@ -17,7 +17,8 @@ module.exports = {
                 'meals.description',
                 'orders.id as order_id',
                 'orders.like',
-                'lovs.id as time'
+                'lovs.id as time',
+                'lovs.nice as time_nice'
             )
             .from('schedules')
             .leftJoin('orders', 'schedules.id', 'orders.schedule_id')
@@ -25,6 +26,8 @@ module.exports = {
             .innerJoin('lovs', 'schedules.time', 'lovs.id')
             .where('schedules.date', '>=', start.toISOString().slice(0, 10))
             .andWhere('schedules.date', '<', ending.toISOString().slice(0, 10))
+            .orderBy('schedules.date', 'asc')
+            .orderBy('lovs.id', 'desc')
 
         return res.json(schedules)
     }

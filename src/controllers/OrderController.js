@@ -61,10 +61,9 @@ module.exports = {
             })
 
             const order = await knex
-                .select('id')
+                .select('id', 'created_at')
                 .from('orders')
-                .orderBy('created_at', 'desc')
-                .limit(1)
+                .where({ user_id, schedule_id })
                 .first()
 
             return res.json({

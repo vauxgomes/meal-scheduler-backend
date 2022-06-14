@@ -15,6 +15,14 @@ const ScheduleController = require('./controllers/ScheduleController')
 const OrderController = require('./controllers/OrderController')
 const WeekController = require('./controllers/WeekController')
 
+// System
+routes.get('/sys', (req, res) => {
+    return res.status(400).json({
+        system: 'Meal-Scheduler',
+        version: 'beta'
+    })
+})
+
 // Account
 routes.post('/login', AccountController.register)
 
@@ -104,7 +112,7 @@ routes.get(
 routes.get(
     '/schedules/:id',
     auth,
-    roles([accesses.ROOT, accesses.ADMIN]),
+    roles([accesses.ROOT, accesses.ADMIN, accesses.USER]),
     ScheduleController.show
 )
 routes.post(
