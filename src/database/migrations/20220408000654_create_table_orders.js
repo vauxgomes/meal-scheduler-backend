@@ -5,8 +5,8 @@ exports.up = function (knex) {
     return knex.schema.createTable('orders', function (table) {
         table.uuid('id').primary().defaultTo(knex.raw(uuidFn))
 
-        table.uuid('user_id').unique().notNullable()
-        table.uuid('schedule_id').unique().notNullable()
+        table.uuid('user_id').notNullable()
+        table.uuid('schedule_id').notNullable()
         table.boolean('like').defaultTo(null)
 
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
@@ -18,7 +18,10 @@ exports.up = function (knex) {
             .references('schedules.id')
             .onDelete('CASCADE')
 
-        table.unique(['user_id', 'schedule_id'])
+        table.unique(['user_id', 'schedule_id'], {
+            indexName: 'users_composite_index',
+            useConstraint: true
+        })
     })
 }
 

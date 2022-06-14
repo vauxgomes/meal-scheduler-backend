@@ -7,7 +7,7 @@ module.exports = {
         start.setMinutes(start.getMinutes() - start.getTimezoneOffset())
 
         const ending = new Date(start)
-        ending.setDate(ending.getDate() + 6)
+        ending.setDate(ending.getDate() + 20)
 
         const schedules = await knex
             .select(
@@ -27,7 +27,7 @@ module.exports = {
             .where('schedules.date', '>=', start.toISOString().slice(0, 10))
             .andWhere('schedules.date', '<', ending.toISOString().slice(0, 10))
             .orderBy('schedules.date', 'asc')
-            .orderBy('lovs.id', 'desc')
+            .orderBy('lovs.id', 'asc')
 
         return res.json(schedules)
     }

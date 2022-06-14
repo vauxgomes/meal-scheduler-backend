@@ -55,6 +55,8 @@ module.exports = {
         const { schedule_id } = req.body
 
         try {
+            console.log(user_id, schedule_id)
+            
             await knex('orders').insert({
                 user_id,
                 schedule_id
@@ -72,6 +74,7 @@ module.exports = {
                 order
             })
         } catch (err) {
+            console.log(err)
             if (err)
                 return res.status(400).json({
                     success: false,
