@@ -13,13 +13,14 @@ module.exports = {
                 'lovs.order as time',
                 'lovs.nice as time_nice',
                 'like',
+                'orders.created_at'
             )
             .from('orders')
             .innerJoin('schedules', 'orders.schedule_id', 'schedules.id')
             .innerJoin('meals', 'schedules.meal_id', 'meals.id')
             .innerJoin('lovs', 'schedules.time', 'lovs.id')
             .where('orders.user_id', user_id)
-            .orderBy('orders.created_at', 'asc')
+            .orderBy('orders.created_at', 'desc')
             .limit(30)
 
         return res.json(orders)
