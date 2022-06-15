@@ -40,7 +40,12 @@ routes.post(
     roles([accesses.ROOT, accesses.ADMIN]),
     UserController.create
 )
-routes.put('/users/:id', auth, UserController.update)
+routes.put(
+    '/users/:id',
+    auth,
+    roles([accesses.ROOT, accesses.ADMIN]),
+    UserController.update
+)
 routes.delete(
     '/users/:id',
     auth,

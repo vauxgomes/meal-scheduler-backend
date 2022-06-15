@@ -80,7 +80,7 @@ module.exports = {
 
         try {
             if (password) {
-                password = hashSync(password, ENC_SALT)
+                password = hashSync(password, Number(ENC_SALT))
             }
 
             await knex('users')
@@ -98,6 +98,7 @@ module.exports = {
                 msg: 'user.update.ok'
             })
         } catch (err) {
+            console.log(err)
             return res.status(404).send({
                 success: false,
                 msg: 'user.update.nok'
