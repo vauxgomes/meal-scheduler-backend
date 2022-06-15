@@ -7,7 +7,8 @@
         "start": "node src/server.js",
         "dev": "NODE_ENV=development nodemon src/server.js",
         "migrate": "npx knex migrate:latest --env production",
-        "seed": "npx knex seed:run --env production"
+        "seed": "npx knex seed:run --env production",
+        "reset-db": "npx knex migrate:rollback --env development && npx knex migrate:latest --env development && npx knex seed:run --env development"
     },
     "repository": {
         "type": "git",
