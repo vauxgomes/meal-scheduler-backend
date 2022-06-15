@@ -11,7 +11,8 @@ module.exports = {
                 'meals.description',
                 'schedules.date',
                 'lovs.order as time',
-                'like'
+                'lovs.nice as time_nice',
+                'like',
             )
             .from('orders')
             .innerJoin('schedules', 'orders.schedule_id', 'schedules.id')
@@ -55,8 +56,6 @@ module.exports = {
         const { schedule_id } = req.body
 
         try {
-            console.log(user_id, schedule_id)
-            
             await knex('orders').insert({
                 user_id,
                 schedule_id
@@ -74,7 +73,6 @@ module.exports = {
                 order
             })
         } catch (err) {
-            console.log(err)
             if (err)
                 return res.status(400).json({
                     success: false,
@@ -140,10 +138,11 @@ module.exports = {
     // Update
     async update(req, res) {
         const { id } = req.params
+        const { id: user_id } = req.user
         const { like } = req.body
 
         try {
-            await knex('orders').update({ like }).where({ id })
+            await knex('orders').update({ like }).where({ id, user_id })
 
             return res.status(200).send({
                 success: true,

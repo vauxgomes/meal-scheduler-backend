@@ -3,6 +3,8 @@ const knex = require('../database')
 module.exports = {
     // Index
     async index(req, res) {
+        const { id: user_id } = req.user
+
         const start = new Date()
         start.setMinutes(start.getMinutes() - start.getTimezoneOffset())
 
@@ -15,13 +17,10 @@ module.exports = {
                 'schedules.meal_id',
                 'schedules.date',
                 'meals.description',
-                'orders.id as order_id',
-                'orders.like',
                 'lovs.id as time',
                 'lovs.nice as time_nice'
             )
             .from('schedules')
-            .leftJoin('orders', 'schedules.id', 'orders.schedule_id')
             .innerJoin('meals', 'schedules.meal_id', 'meals.id')
             .innerJoin('lovs', 'schedules.time', 'lovs.id')
             .where('schedules.date', '>=', start.toISOString().slice(0, 10))
