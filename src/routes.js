@@ -154,7 +154,7 @@ routes.post(
 )
 
 // Weeks
-routes.get('/weeks', auth, roles([accesses.USER]), WeekController.index)
+routes.get('/weeks', auth, WeekController.index)
 
 // Export
 module.exports = routes
