@@ -90,7 +90,7 @@ module.exports = {
     // Create
     async createOnBehalfOf(req, res) {
         const { enrollment_code } = req.params
-        const { schedule_id } = req.body
+        const { date, time } = req.body
 
         try {
             const user = await knex('students')
@@ -105,9 +105,21 @@ module.exports = {
                 })
             }
 
+            const schedule = await knex('schedules')
+                .innerJoin('lovs', 'lovs.id', 'schedules.time')
+                .where({ 'schedules.date': date, 'lovs.order': time })
+                .first()
+
+            if (!schedule) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'order.schedule.unknown'
+                })
+            }
+
             await knex('orders').insert({
                 user_id: user.user_id,
-                schedule_id
+                schedule_id: schedule.id
             })
 
             const order = await knex
