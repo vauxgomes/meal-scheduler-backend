@@ -1,9 +1,6 @@
 const dotenv = require('dotenv')
 dotenv.config()
 
-const { hashSync } = require('bcrypt')
-const ENC_SALT = Number(process.env.ENC_SALT)
-
 exports.seed = async function (knex) {
     console.log('SEEDS: STUDENTS')
 

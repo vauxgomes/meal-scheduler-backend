@@ -1,9 +1,6 @@
 const dotenv = require('dotenv')
 dotenv.config()
 
-const { hashSync } = require('bcrypt')
-const ENC_SALT = Number(process.env.ENC_SALT)
-
 exports.seed = async function (knex) {
     console.log('SEEDS: MEALS')
 
@@ -15,8 +12,8 @@ exports.seed = async function (knex) {
     // await knex('meals').del()
     await knex('meals').insert([
         {
-            title: 'Meal 0001',
-            description: 'Refeição Exemplo 0001',
+            title: 'Refeição 01',
+            description: 'Refeição Exemplo 01',
             visible: true,
             energy: 100,
             carbohydrates: 100,
@@ -24,8 +21,8 @@ exports.seed = async function (knex) {
             lipids: 100
         },
         {
-            title: 'Meal 0002',
-            description: 'Refeição Exemplo 0002',
+            title: 'Refeição 02',
+            description: 'Refeição Exemplo 02',
             visible: true,
             energy: 100,
             carbohydrates: 100,
@@ -33,8 +30,8 @@ exports.seed = async function (knex) {
             lipids: 100
         },
         {
-            title: 'Meal 0003',
-            description: 'Refeição Exemplo 0003',
+            title: 'Refeição 03',
+            description: 'Refeição Exemplo 03',
             visible: true,
             energy: 100,
             carbohydrates: 100,
